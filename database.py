@@ -1,6 +1,11 @@
+import os
 from deta import Deta
+from dotenv import load_dotenv
 
-DETA_KEY = "a0vy4sdci48_rGQywvgrvT5qMRYYkzikUmJBeQjThDWB"
+
+#load the environment variables
+load_dotenv(".env")
+DETA_KEY = os.getenv("DETA_KEY")
 
 deta = Deta(DETA_KEY)
 
