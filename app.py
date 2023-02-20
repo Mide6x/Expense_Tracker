@@ -22,12 +22,20 @@ st.title(page_title + "" + page_icon)
 years = [datetime.today().year - 1, datetime.today().year, datetime.today().year + 1]
 months = list(calendar.month_name[1:])
 
-#Navigation menu
+# hide streamlit stuff
+hide_st_style = """<style>
+                #MainMenu {visibility: hidden;}
+                footer {visibility: hidden;}
+                header {visibility: hidden;}
+                </style>"""
+st.markdown(hide_st_style, unsafe_allow_html=True)
+
+# Navigation menu
 selected = option_menu(
     menu_title=None,
     options=["Data Entry", "Visualization"],
-    icons=["pencil-fill", "bar-chart-fill"], #https://icons.getbootstrap.com
-    orientation="horizontal"
+    icons=["pencil-fill", "bar-chart-fill"],  # https://icons.getbootstrap.com
+    orientation="horizontal",
 )
 
 # --- first page ---#
@@ -61,7 +69,9 @@ if selected == "Data Entry":
         submitted = st.form_submit_button("Give me visuals bro")
 
         if submitted:
-            period = str(st.session_state["year"]) + "_" + str(st.session_state["month"])
+            period = (
+                str(st.session_state["year"]) + "_" + str(st.session_state["month"])
+            )
             incomes = {income: st.session_state[income] for income in incomes}
             expenses = {expense: st.session_state[expense] for expense in expenses}
             # TODO: Add contents to database
@@ -69,7 +79,6 @@ if selected == "Data Entry":
             st.write(f"expenses: {expenses}")
 
             st.success("Data Saved!")
-
 
     # plot periods
 if selected == "Visualization":
@@ -108,7 +117,7 @@ if selected == "Visualization":
             node = dict(label=label, pad=20, thickness=30, color="#E694FF")
             data = go.Sankey(link=link, node=node)
 
-            #plot it
+            # plot it
             fig = go.Figure(data)
             fig.update_layout(margin=dict(l=0, r=0, t=5, b=5))
             st.plotly_chart(fig, use_container_width=True)
